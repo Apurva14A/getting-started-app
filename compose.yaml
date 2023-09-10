@@ -1,13 +1,14 @@
 version: '3.8'
 services:
   app:
-    image: node:18-alpine
-    command: sh -c "yarn install && yarn run dev"
+    image: aapurva/getting-started:v1.0.0-alpine
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 127.0.0.1:3000:3000
-    working_dir: /app
-    volumes:
-      - ./:/app
+    networks:
+      - todo-app
     environment:
       MYSQL_HOST: mysql
       MYSQL_USER: root
@@ -20,8 +21,12 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: secret
       MYSQL_DATABASE: todos
+    networks:
+      - todo-app
   
 volumes:
   todo-mysql-data:
+networks:
+  todo-app:
 
 
