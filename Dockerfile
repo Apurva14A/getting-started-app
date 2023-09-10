@@ -1,8 +1,13 @@
 # syntax=docker/dockerfile:1
 
-FROM node:18-alpine
+FROM node:18 AS build
 WORKDIR /app
+COPY package* yarn.lock ./
+RUN yarn install
 COPY . .
-RUN yarn install --production
-CMD ["node", "src/index.js"]
+
+FROM node:18-alpine
+COPY --from=build /app /
 EXPOSE 3000
+CMD ["node", "src/index.js"]
+
